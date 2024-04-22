@@ -1,0 +1,147 @@
+# 1. Generate random and unique numbers of ranges 1000,40,000,80,000,200,000 and 1,000,000. 
+import random
+
+class TreeNode:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+def insert(root, value):
+    if root is None:
+        return TreeNode(value)
+    if value < root.value:
+        root.left = insert(root.left, value)
+    elif value > root.value:
+        root.right = insert(root.right, value)
+    return root
+
+def build_bst(numbers):
+    root = None
+    for num in numbers:
+        root = insert(root, num)
+    return root
+
+def inorder_traversal(root):
+    result = []
+    if root:
+        result += inorder_traversal(root.left)
+        result.append(root.value)
+        result += inorder_traversal(root.right)
+    return result
+
+# Generate random and unique numbers for each range
+ranges = [1000, 40000, 80000, 200000, 1000000]
+sets_of_numbers = []
+
+for r in ranges:
+    if r <= 1000000:
+        numbers = random.sample(range(1, 1000001), r)
+        sets_of_numbers.append(numbers)
+    else:
+        print("The range exceeds 1,000,000")
+
+# Build BST for each set of numbers
+trees = []
+for numbers in sets_of_numbers:
+    tree = build_bst(numbers)
+    trees.append(tree)
+
+# Example: Print inorder traversal of each BST
+for i, tree in enumerate(trees):
+    print(f"Inorder traversal of tree {i+1}:")
+    print(inorder_traversal(tree))
+
+
+
+
+#2. Apply BFS and DFS on each sets and calculate the time taken for the execution to find that goal 
+through BFS and DFS.
+import random
+import time
+
+class TreeNode:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+def insert(root, value):
+    if root is None:
+        return TreeNode(value)
+    if value < root.value:
+        root.left = insert(root.left, value)
+    elif value > root.value:
+        root.right = insert(root.right, value)
+    return root
+
+def build_bst(numbers):
+    root = None
+    for num in numbers:
+        root = insert(root, num)
+    return root
+
+def bfs(root, goal):
+    if root is None:
+        return False
+    queue = [root]
+    while queue:
+        node = queue.pop(0)
+        if node.value == goal:
+            return True
+        if node.left:
+            queue.append(node.left)
+        if node.right:
+            queue.append(node.right)
+    return False
+
+def dfs(root, goal):
+    if root is None:
+        return False
+    stack = [root]
+    while stack:
+        node = stack.pop()
+        if node.value == goal:
+            return True
+        if node.right:
+            stack.append(node.right)
+        if node.left:
+            stack.append(node.left)
+    return False
+
+# Generate random and unique numbers for each range
+ranges = [1000, 40000, 80000, 200000, 1000000]
+sets_of_numbers = []
+
+for r in ranges:
+    if r <= 1000000:
+        numbers = random.sample(range(1, 1000001), r)
+        sets_of_numbers.append(numbers)
+    else:
+        print("The range exceeds 1,000,000")
+
+# Build BST for each set of numbers
+trees = []
+for numbers in sets_of_numbers:
+    tree = build_bst(numbers)
+    trees.append(tree)
+
+# Apply BFS and DFS on each set and calculate execution time
+for i, tree in enumerate(trees):
+    print(f"Set {i+1}:")
+    
+    # Choose a random goal
+    goal = random.choice(sets_of_numbers[i])
+    
+    # BFS
+    start_time = time.time()
+    bfs_result = bfs(tree, goal)
+    bfs_time = time.time() - start_time
+    print(f"BFS - Goal {goal} found: {bfs_result}, Time: {bfs_time:.6f} seconds")
+
+    # DFS
+    start_time = time.time()
+    dfs_result = dfs(tree, goal)
+    dfs_time = time.time() - start_time
+    print(f"DFS - Goal {goal} found: {dfs_result}, Time: {dfs_time:.6f} seconds")
+
